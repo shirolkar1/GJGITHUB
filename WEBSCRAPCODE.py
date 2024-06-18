@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+import os
 
 # Set up Chrome options
 chrome_options = Options()
@@ -12,8 +13,8 @@ chrome_options.add_argument('--headless')  # Run in headless mode
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')
 
-# Path to your ChromeDriver
-chromedriver_path = r"C:\Users\User\Downloads\chromedriver-win64 (1)\chromedriver-win64\chromedriver.exe"  # Update this path
+# Path to your ChromeDriver (update this path)
+chromedriver_path = r"C:\Users\User\Downloads\chromedriver-win64 (1)\chromedriver-win64\chromedriver.exe"
 
 # Set up Chrome service
 service = Service(chromedriver_path)
@@ -23,8 +24,8 @@ driver = webdriver.Chrome(service=service, options=chrome_options)
 
 # Define the login URL and login credentials
 login_url = "https://gjcportal.xchangefusion.com"
-username = "varungupta58@yahoo.com"
-password = "BS34GJC"  # Replace with the actual password
+username = os.getenv("LOGIN_USERNAME")  # Use environment variable for username
+password = os.getenv("LOGIN_PASSWORD")  # Use environment variable for password
 
 try:
     # Open the login page
