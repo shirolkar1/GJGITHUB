@@ -25,16 +25,26 @@ jobs:
         python -m pip install --upgrade pip
         pip install selenium
 
-    - name: Download ChromeDriver
+    - name: Set up Chrome and ChromeDriver
       run: |
-        sudo apt-get install -y chromium-chromedriver
-        if [ ! -f /usr/bin/chromedriver ]; then sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver; fi
+        sudo apt-get update
+        sudo apt-get install -y unzip xvfb
+        wget -O /tmp/google-chrome-stable_current_amd64.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo dpkg -i /tmp/google-chrome-stable_current_amd64.deb || sudo apt-get -f install -y
+        sudo apt-get install -y google-chrome-stable
+        CHROME_DRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)
+        wget -O /tmp/chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip
+        unzip /tmp/chromedriver_linux64.zip -d /tmp
+        sudo mv /tmp/chromedriver /usr/local/bin/chromedriver
+        sudo chmod +x /usr/local/bin/chromedriver
 
     - name: Run web scraper
       run: |
-        python webscrapecode.py
+        Xvfb :99 -screen 0 1920x1080x24 &
+        export DISPLAY=:99
+        python WEBSCRAPECODE.py
       env:
-        DISPLAY: ":99"  # Necessary for headless Chrome
         LOGIN_USERNAME: ${{ secrets.LOGIN_USERNAME }}
         LOGIN_PASSWORD: ${{ secrets.LOGIN_PASSWORD }}
+
 
