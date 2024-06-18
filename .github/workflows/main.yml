@@ -32,7 +32,7 @@ jobs:
 
     - name: Run web scraper
       run: |
-        python web_scrape.py
+        python web_scrapecode.py
       env:
         DISPLAY: ":99"  # Necessary for headless Chrome
         LOGIN_USERNAME: ${{ secrets.LOGIN_USERNAME }}
